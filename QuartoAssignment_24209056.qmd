@@ -3,6 +3,8 @@ title: "Quarto Assignment"
 author: "Seán Houraghan (24209056)"
 format: pdf
 editor: visual
+date: today
+date-format: long
 ---
 
 # Introduction
@@ -40,7 +42,7 @@ stocks = as.data.frame(EuStockMarkets) |>
 
 # Plotting
 #### Index Price over Time
-The plot below (*Figure 1*) shows how the price of each EU Index in the dataset changes over the period between 1991 and 1998. From this plot, it can be seen that the price of all four indices rose significantly from 1991 to 1998. The SMI shows the largest increase, approximately quadrupling over this time period, suggesting it would have been the best index to be invested in.
+The plot below **(*Figure 1*)** shows how the price of each EU Index in the dataset changes over the period between 1991 and 1998. From this plot, it can be seen that the price of all four indices rose significantly from 1991 to 1998. The SMI shows the largest increase, approximately quadrupling over this time period, suggesting it would have been the best index to be invested in.
 
 ```{r fig.height=4, fig.width=11}
 #| fig-cap: "Stock Price of Major EU Indices between 1991-1998"
@@ -78,8 +80,8 @@ ggplot(as.data.frame(ret), aes(x=ret)) +
              linetype="dashed", linewidth=0.6) + # Add line at returns median
   # Add legend for mean and median lines
   scale_color_manual(name = "Statistics", values=c(Mean="blue",Median="red")) +
-  labs(x='Daily Percentage Returns', y='') + # Change axis labels
+  labs(x='Daily Percentage Returns', y='', title='Returns Distribution') +
   theme_minimal()
 
 ```
-It is seen in *Figure 2* that the daily percentage returns approximate a normal distribution. This normal distribution is nearly centered around zero, being only slightly positive (Mean = `r round(mean(ret)*100,2)`%). This tells us that, on average, the price of the FTSE index increased from one day to the next. The median returns is lower than the mean but is still positive. With the mean and median being so low, it may be a better idea to look into different indices for investing.
+It is seen in ***Figure 2*** that the daily percentage returns approximate a normal distribution. This normal distribution is nearly centered around zero, being only slightly positive (Mean = `r round(mean(ret)*100,2)`%). This tells us that, on average, the price of the FTSE index increased from one day to the next. The median returns is lower than the mean but is still positive. With the mean and median being so low, it may be a better idea to look into different indices for investing.
