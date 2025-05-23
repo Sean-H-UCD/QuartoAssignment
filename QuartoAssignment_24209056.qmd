@@ -53,8 +53,7 @@ The plot below **(*Figure 1*)** shows how the price of each EU Index in the data
 # Ensure each index has a different coloured line
 ggplot(data=stocks, aes(x=time, y=price, colour=index)) +
   geom_line() + 
-  labs(x='Time', y='Price ($)', 
-       title='Stock Price of Major EU Indices between 1991-1998') +
+  labs(x='Time', y='Price ($)') +
   theme_minimal() +
   scale_x_continuous(breaks=seq(1991,1999,1),
                    labels=seq(1991,1999,1)) # Ensure axis ticks for each year
@@ -80,7 +79,7 @@ ggplot(as.data.frame(ret), aes(x=ret)) +
              linetype="dashed", linewidth=0.6) + # Add line at returns median
   # Add legend for mean and median lines
   scale_color_manual(name = "Statistics", values=c(Mean="blue",Median="red")) +
-  labs(x='Daily Percentage Returns', y='', title='Returns Distribution') +
+  labs(x='Daily Percentage Returns', y='', title='Daily Returns Distribution') +
   theme_minimal()
 
 ```
