@@ -1,0 +1,85 @@
+---
+title: "Quarto Assignment"
+author: "Seán Houraghan (24209056)"
+format: pdf
+editor: visual
+---
+
+# Introduction
+
+In this report, the **EU Stock Market** dataset will be briefly analysed. This shows the closing daily stock prices of major EU indices from 1991-1998. The table below show the first 6 entries in this dataset. Here, it is seen that there is data on the DAX, SMI, CAC and FSTE indices.
+
+```{r}
+#| echo: false
+#| output: false
+#| label: Library_Importing
+
+# Import necessary libraries
+library(tidyr) # For data manipulation
+library(dplyr) # For data manipulation
+library(knitr) # For creating nice markdown tables
+library(ggplot2) # For creating nice plots
+```
+
+```{r}
+#| echo: false
+#| label: Data_Manipulation
+
+# Import data
+data('EuStockMarkets')
+
+# Show first few rows of data
+kable(head(EuStockMarkets), caption='Daily Close Price for EU Indices')
+
+# Add dates column to dataframe for plotting purposes
+data("EuStockMarkets")
+stocks = as.data.frame(EuStockMarkets) |>
+  gather(index, price) |>
+  mutate(time = rep(time(EuStockMarkets), 4))
+```
+
+# Plotting
+#### Index Price over Time
+The plot below (*Figure 1*) shows how the price of each EU Index in the dataset changes over the period between 1991 and 1998. From this plot, it can be seen that the price of all four indices rose significantly from 1991 to 1998. The SMI shows the largest increase, approximately quadrupling over this time period, suggesting it would have been the best index to be invested in.
+
+```{r fig.height=4, fig.width=11}
+#| fig-cap: "Stock Price of Major EU Indices between 1991-1998"
+#| label: Daily_Price_Plot
+#| echo: false
+
+# Create line plot for daily price of each of the 4 indices
+# Ensure each index has a different coloured line
+ggplot(data=stocks, aes(x=time, y=price, colour=index)) +
+  geom_line() + 
+  labs(x='Time', y='Price ($)', 
+       title='Stock Price of Major EU Indices between 1991-1998') +
+  theme_minimal() +
+  scale_x_continuous(breaks=seq(1991,1999,1),
+                   labels=seq(1991,1999,1)) # Ensure axis ticks for each year
+```
+
+#### Distribution of Daily Returns of the FTSE
+
+```{r fig.height=4, fig.width=8}
+#| echo: false
+#| label: Returns_Distribution
+#| fig-cap: "Distribution of Daily Returns for FTSE as a Percentage"
+
+# Find Daily Percentage Return
+prices = as.data.frame(EuStockMarkets)$FTSE
+ret = exp(diff(log(prices))) - 1
+
+# Create density plot for daily returns
+ggplot(as.data.frame(ret), aes(x=ret)) +
+  geom_density() +
+  geom_vline(aes(xintercept=mean(ret), color="Mean"), 
+             linetype="dashed", linewidth=0.6) + # Add line at returns mean
+  geom_vline(aes(xintercept=median(ret), color="Median"), 
+             linetype="dashed", linewidth=0.6) + # Add line at returns median
+  # Add legend for mean and median lines
+  scale_color_manual(name = "Statistics", values=c(Mean="blue",Median="red")) +
+  labs(x='Daily Percentage Returns', y='') + # Change axis labels
+  theme_minimal()
+
+```
+It is seen in *Figure 2* that the daily percentage returns approximate a normal distribution. This normal distribution is nearly centered around zero, being only slightly positive (Mean = `r round(mean(ret)*100,2)`%). This tells us that, on average, the price of the FTSE index increased from one day to the next. The median returns is lower than the mean but is still positive. With the mean and median being so low, it may be a better idea to look into different indices for investing.
